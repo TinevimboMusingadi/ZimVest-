@@ -72,6 +72,18 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             border: 2px solid #1DB954;
         }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1DB954;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body class="bg-background-light font-body text-text-main min-h-screen flex flex-col">
@@ -106,7 +118,7 @@
 <div class="flex flex-col gap-2">
 <label class="text-text-main text-[13px] font-bold tracking-[0.05em] uppercase" for="recipient">Recipient</label>
 <div class="relative">
-<select class="form-select w-full rounded border-gray-300 bg-surface focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-50 h-14 pl-4 pr-10 text-text-main text-base font-medium appearance-none transition-shadow" id="recipient">
+<select class="form-select w-full rounded border-gray-300 bg-surface focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-50 h-14 pl-4 pr-10 text-text-main text-base font-medium appearance-none transition-shadow" id="recipient" onchange="checkNewRecipient(this)">
 <option disabled="" value="">Select a recipient</option>
 <option selected="" value="grace">Grace (Mother) - **** 4892</option>
 <option value="john">John (Brother) - **** 1102</option>
@@ -117,38 +129,104 @@
 </div>
 </div>
 </div>
+
+<!-- Add New Recipient Modal (Hidden by default) -->
+<div id="newRecipientModal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-md rounded-lg p-6 shadow-2xl">
+        <h2 class="text-xl font-bold mb-4">Add New Recipient</h2>
+        <div class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Full Name</label>
+                <input type="text" id="newName" class="w-full border-gray-300 rounded-md h-12 px-4 focus:ring-primary" placeholder="e.g. Tinashe Musingadi">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Phone Number / Account</label>
+                <input type="text" id="newAccount" class="w-full border-gray-300 rounded-md h-12 px-4 focus:ring-primary" placeholder="e.g. +263 77...">
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="closeRecipientModal()" class="flex-1 h-12 border border-gray-300 rounded-md font-bold text-sm">Cancel</button>
+                <button onclick="saveRecipient()" class="flex-1 h-12 bg-primary text-white rounded-md font-bold text-sm">Save Recipient</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Input Group: Investment Asset Selector -->
 <div class="flex flex-col gap-2">
 <label class="text-text-main text-[13px] font-bold tracking-[0.05em] uppercase mb-1">Target Investment</label>
-<!-- Asset Item Card (Active) -->
-<div class="h-[72px] border-2 border-primary rounded flex items-center p-4 cursor-pointer bg-green-50/50 transition-colors relative">
-<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-4 shrink-0">
-<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">agriculture</span>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex justify-between items-baseline mb-0.5">
-<h3 class="text-sm font-bold text-text-main truncate">ZimAgri Fund</h3>
-<span class="text-xs font-bold text-primary">+8.4% YTD</span>
-</div>
-<p class="text-xs text-muted truncate">Commercial farming real estate</p>
-</div>
-<div class="ml-4 shrink-0 flex items-center justify-center w-5 h-5 rounded-full border-2 border-primary bg-primary relative">
-<div class="w-2 h-2 rounded-full bg-white"></div>
-</div>
-</div>
-<!-- Asset Item Card (Inactive) -->
-<div class="h-[72px] border border-gray-200 rounded flex items-center p-4 cursor-pointer hover:bg-gray-50 transition-colors relative mt-2">
-<div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mr-4 shrink-0">
-<span class="material-symbols-outlined text-muted text-xl" style="font-variation-settings: 'FILL' 1;">domain</span>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex justify-between items-baseline mb-0.5">
-<h3 class="text-sm font-bold text-text-main truncate">Harare Prime Real Estate</h3>
-<span class="text-xs font-bold text-primary">+5.2% YTD</span>
-</div>
-<p class="text-xs text-muted truncate">Commercial &amp; Residential</p>
-</div>
-<div class="ml-4 shrink-0 w-5 h-5 rounded-full border-2 border-gray-300"></div>
+<div class="flex flex-col gap-2 max-h-[240px] overflow-y-auto pr-2 custom-scrollbar" id="assetContainer">
+    <!-- Asset Item Card (Active) -->
+    <div class="asset-card active h-[72px] border-2 border-primary rounded flex items-center p-4 cursor-pointer bg-green-50/50 transition-colors relative" onclick="selectAsset(this, 'ZimAgri Fund')">
+    <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-4 shrink-0">
+    <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">agriculture</span>
+    </div>
+    <div class="flex-1 min-w-0">
+    <div class="flex justify-between items-baseline mb-0.5">
+    <h3 class="text-sm font-bold text-text-main truncate">ZimAgri Fund</h3>
+    <span class="text-xs font-bold text-primary">+8.4% YTD</span>
+    </div>
+    <p class="text-xs text-muted truncate">Commercial farming real estate</p>
+    </div>
+    <div class="check-mark ml-4 shrink-0 flex items-center justify-center w-5 h-5 rounded-full border-2 border-primary bg-primary relative">
+    <div class="w-2 h-2 rounded-full bg-white"></div>
+    </div>
+    </div>
+    <!-- Delta -->
+    <div class="asset-card h-[72px] border border-gray-200 rounded flex items-center p-4 cursor-pointer hover:bg-gray-50 transition-colors relative" onclick="selectAsset(this, 'Delta Corporation')">
+    <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center mr-4 shrink-0">
+    <span class="material-symbols-outlined text-red-600 text-xl">liquor</span>
+    </div>
+    <div class="flex-1 min-w-0">
+    <div class="flex justify-between items-baseline mb-0.5">
+    <h3 class="text-sm font-bold text-text-main truncate">Delta Corporation</h3>
+    <span class="text-xs font-bold text-primary">+1.2%</span>
+    </div>
+    <p class="text-xs text-muted truncate">Beverages & Manufacturing</p>
+    </div>
+    <div class="check-mark ml-4 shrink-0 w-5 h-5 rounded-full border-2 border-gray-300"></div>
+    </div>
+    <!-- Econet -->
+    <div class="asset-card h-[72px] border border-gray-200 rounded flex items-center p-4 cursor-pointer hover:bg-gray-50 transition-colors relative" onclick="selectAsset(this, 'Econet Wireless')">
+    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-4 shrink-0">
+    <span class="material-symbols-outlined text-blue-600 text-xl">signal_cellular_alt</span>
+    </div>
+    <div class="flex-1 min-w-0">
+    <div class="flex justify-between items-baseline mb-0.5">
+    <h3 class="text-sm font-bold text-text-main truncate">Econet Wireless</h3>
+    <span class="text-xs font-bold text-primary">+0.5%</span>
+    </div>
+    <p class="text-xs text-muted truncate">Telecommunications</p>
+    </div>
+    <div class="check-mark ml-4 shrink-0 w-5 h-5 rounded-full border-2 border-gray-300"></div>
+    </div>
+    <!-- EcoCash -->
+    <div class="asset-card h-[72px] border border-gray-200 rounded flex items-center p-4 cursor-pointer hover:bg-gray-50 transition-colors relative" onclick="selectAsset(this, 'EcoCash Holdings')">
+    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-4 shrink-0">
+    <span class="material-symbols-outlined text-blue-400 text-xl">account_balance_wallet</span>
+    </div>
+    <div class="flex-1 min-w-0">
+    <div class="flex justify-between items-baseline mb-0.5">
+    <h3 class="text-sm font-bold text-text-main truncate">EcoCash Holdings</h3>
+    <span class="text-xs font-bold text-primary">+3.5%</span>
+    </div>
+    <p class="text-xs text-muted truncate">Fintech & Payments</p>
+    </div>
+    <div class="check-mark ml-4 shrink-0 w-5 h-5 rounded-full border-2 border-gray-300"></div>
+    </div>
+    <!-- Harare RE -->
+    <div class="asset-card h-[72px] border border-gray-200 rounded flex items-center p-4 cursor-pointer hover:bg-gray-50 transition-colors relative" onclick="selectAsset(this, 'Harare Real Estate')">
+    <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mr-4 shrink-0">
+    <span class="material-symbols-outlined text-muted text-xl">domain</span>
+    </div>
+    <div class="flex-1 min-w-0">
+    <div class="flex justify-between items-baseline mb-0.5">
+    <h3 class="text-sm font-bold text-text-main truncate">Harare Prime Real Estate</h3>
+    <span class="text-xs font-bold text-primary">+5.2% YTD</span>
+    </div>
+    <p class="text-xs text-muted truncate">Commercial & Residential</p>
+    </div>
+    <div class="check-mark ml-4 shrink-0 w-5 h-5 rounded-full border-2 border-gray-300"></div>
+    </div>
 </div>
 </div>
 <!-- Split Allocation Area -->
@@ -202,6 +280,8 @@
     const splitText = document.querySelector('.tabular-nums'); // The "70% / 30%" text
     const displayGrace = document.querySelectorAll('.tabular-nums')[1]; // Sending $700.00
     const displayZimAgri = document.querySelectorAll('.tabular-nums')[2]; // Investing $300.00
+    let selectedAssetName = "ZimAgri Fund";
+    let selectedRecipientName = "Grace";
 
     function updateUI() {
         const total = parseFloat(amountInput.value) || 0;
@@ -216,8 +296,12 @@
         const familyAmt = (total * familyPct / 100).toFixed(2);
         const investAmt = (total * investPct / 100).toFixed(2);
         
-        if (displayGrace) displayGrace.textContent = `$${familyAmt}`;
-        if (displayZimAgri) displayZimAgri.textContent = `$${investAmt}`;
+        if (displayGrace) {
+            displayGrace.parentElement.innerHTML = `Sending <span class="font-bold tabular-nums">$${familyAmt}</span> to ${selectedRecipientName}`;
+        }
+        if (displayZimAgri) {
+            displayZimAgri.parentElement.innerHTML = `Investing <span class="font-bold tabular-nums">$${investAmt}</span> in ${selectedAssetName}`;
+        }
         
         // Update slider background gradient
         slider.style.background = `linear-gradient(to right, #111111 0%, #111111 ${val}%, #1DB954 ${val}%, #1DB954 100%)`;
@@ -225,6 +309,61 @@
 
     slider.addEventListener('input', updateUI);
     amountInput.addEventListener('input', updateUI);
+
+    // Recipient Logic
+    function checkNewRecipient(select) {
+        if (select.value === 'new') {
+            document.getElementById('newRecipientModal').classList.remove('hidden');
+        } else {
+            selectedRecipientName = select.options[select.selectedIndex].text.split('(')[0].trim();
+            updateUI();
+        }
+    }
+
+    function closeRecipientModal() {
+        document.getElementById('newRecipientModal').classList.add('hidden');
+        document.getElementById('recipient').value = 'grace';
+    }
+
+    function saveRecipient() {
+        const name = document.getElementById('newName').value;
+        const account = document.getElementById('newAccount').value;
+        if (name && account) {
+            const select = document.getElementById('recipient');
+            const option = document.createElement('option');
+            option.value = name.toLowerCase().replace(/\s/g, '_');
+            option.text = `${name} - ${account}`;
+            option.selected = true;
+            select.add(option, select.options[select.options.length - 1]);
+            selectedRecipientName = name;
+            closeRecipientModal();
+            updateUI();
+        }
+    }
+
+    // Asset Logic
+    function selectAsset(el, name) {
+        // Remove active class from all
+        document.querySelectorAll('.asset-card').forEach(card => {
+            card.classList.remove('active', 'border-primary', 'bg-green-50/50', 'border-2');
+            card.classList.add('border-gray-200', 'border');
+            const check = card.querySelector('.check-mark');
+            check.classList.remove('border-primary', 'bg-primary');
+            check.classList.add('border-gray-300');
+            check.innerHTML = '';
+        });
+
+        // Add active class to selected
+        el.classList.add('active', 'border-primary', 'bg-green-50/50', 'border-2');
+        el.classList.remove('border-gray-200', 'border');
+        const check = el.querySelector('.check-mark');
+        check.classList.add('border-primary', 'bg-primary');
+        check.classList.remove('border-gray-300');
+        check.innerHTML = '<div class="w-2 h-2 rounded-full bg-white"></div>';
+
+        selectedAssetName = name;
+        updateUI();
+    }
 
     // Initial call
     updateUI();
