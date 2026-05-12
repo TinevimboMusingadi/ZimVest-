@@ -84,6 +84,14 @@
             background: #1DB954;
             border-radius: 10px;
         }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .scale-in-center {
+            animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
     </style>
 </head>
 <body class="bg-background-light font-body text-text-main min-h-screen flex flex-col">
@@ -259,10 +267,56 @@
 <!-- Actions -->
 <div class="flex gap-4 pt-4 border-t border-gray-100 mt-2">
 <a href="dashboard.html" class="flex-1 flex justify-center items-center h-12 border border-gray-300 rounded text-text-main font-semibold text-sm hover:bg-gray-50 transition-colors">Cancel</a>
-<button class="flex-[2] h-12 bg-primary rounded text-white font-bold text-sm hover:bg-green-600 transition-colors shadow-sm flex justify-center items-center gap-2 relative">
+<button onclick="showConfirmModal()" class="flex-[2] h-12 bg-primary rounded text-white font-bold text-sm hover:bg-green-600 transition-colors shadow-sm flex justify-center items-center gap-2 relative">
                         Confirm Allocation
                         <span class="material-symbols-outlined text-sm">arrow_forward</span>
 </button>
+</div>
+
+<!-- Confirmation Modal (Hidden by default) -->
+<div id="confirmModal" class="hidden fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+    <div class="bg-white w-full max-w-md rounded-xl p-8 shadow-2xl scale-in-center">
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="material-symbols-outlined text-primary text-3xl">check_circle</span>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900">Review Allocation</h2>
+            <p class="text-gray-500 text-sm mt-1">Please confirm your transaction details</p>
+        </div>
+        
+        <div class="space-y-4 bg-gray-50 p-6 rounded-lg border border-gray-100 mb-8">
+            <div class="flex justify-between items-center">
+                <span class="text-xs font-bold uppercase text-gray-400">Total Amount</span>
+                <span class="text-lg font-black text-gray-900" id="modalTotal">$0.00</span>
+            </div>
+            <div class="h-px bg-gray-200"></div>
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-bold uppercase text-gray-400">To Recipient</span>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-bold text-gray-900" id="modalRecipient">Grace</span>
+                    <span class="text-sm font-bold text-gray-600" id="modalFamilyAmt">$0.00</span>
+                </div>
+            </div>
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-bold uppercase text-gray-400">To Investment</span>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-bold text-gray-900" id="modalAsset">ZimAgri Fund</span>
+                    <span class="text-sm font-bold text-primary" id="modalInvestAmt">$0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex gap-3">
+            <button onclick="closeConfirmModal()" class="flex-1 h-14 border border-gray-300 rounded-lg font-bold text-gray-700 hover:bg-gray-50 transition-colors">Back</button>
+            <button onclick="finalizeTransaction()" class="flex-1 h-14 bg-primary text-white rounded-lg font-bold shadow-lg shadow-green-200 hover:bg-green-600 transition-all active:scale-95">Finalize & Send</button>
+        </div>
+    </div>
+</div>
+
+<!-- Success Toast -->
+<div id="successToast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[80] bg-sidebar-bg text-white px-8 py-4 rounded-full shadow-2xl flex items-center gap-3 opacity-0 pointer-events-none transition-all duration-500 translate-y-4">
+    <span class="material-symbols-outlined text-primary">check_circle</span>
+    <span class="font-bold text-sm">Transaction Successful! Redirecting...</span>
 </div>
 </div>
 </div>
@@ -364,6 +418,41 @@
 
         selectedAssetName = name;
         updateUI();
+    }
+
+    // Confirmation Modal Logic
+    function showConfirmModal() {
+        const total = (parseFloat(amountInput.value) || 0).toFixed(2);
+        const val = slider.value;
+        const familyAmt = (total * val / 100).toFixed(2);
+        const investAmt = (total * (100 - val) / 100).toFixed(2);
+
+        document.getElementById('modalTotal').textContent = `$${total}`;
+        document.getElementById('modalRecipient').textContent = selectedRecipientName;
+        document.getElementById('modalFamilyAmt').textContent = `$${familyAmt}`;
+        document.getElementById('modalAsset').textContent = selectedAssetName;
+        document.getElementById('modalInvestAmt').textContent = `$${investAmt}`;
+
+        document.getElementById('confirmModal').classList.remove('hidden');
+    }
+
+    function closeConfirmModal() {
+        document.getElementById('confirmModal').classList.add('hidden');
+    }
+
+    function finalizeTransaction() {
+        // Show success toast
+        const toast = document.getElementById('successToast');
+        toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+        toast.classList.add('opacity-100', 'translate-y-0');
+
+        // Close modal
+        closeConfirmModal();
+
+        // Redirect after a delay
+        setTimeout(() => {
+            window.location.href = 'dashboard.html';
+        }, 3000);
     }
 
     // Initial call
