@@ -247,12 +247,12 @@
 <div class="bg-surface border border-gray-200 rounded p-4 flex flex-col md:flex-row justify-between items-center text-sm font-medium gap-3">
 <div class="flex items-center gap-2">
 <div class="w-2 h-2 rounded-full bg-remittance"></div>
-<span class="text-text-main">Sending <span class="font-bold tabular-nums">$700.00</span> to Grace</span>
+<span class="text-text-main">Sending <span class="font-bold tabular-nums" id="displayFamilyAmt">$700.00</span> to <span id="displayRecipientName" class="font-bold">Grace</span></span>
 </div>
 <span class="text-gray-300 hidden md:inline">|</span>
 <div class="flex items-center gap-2">
 <div class="w-2 h-2 rounded-full bg-accent"></div>
-<span class="text-text-main">Investing <span class="font-bold tabular-nums">$300.00</span> in ZimAgri</span>
+<span class="text-text-main">Investing <span class="font-bold tabular-nums" id="displayInvestAmt">$300.00</span> in <span id="displayAssetName" class="font-bold">ZimAgri Fund</span></span>
 </div>
 </div>
 </div>
@@ -278,8 +278,11 @@
     const slider = document.getElementById('allocationRange');
     const amountInput = document.getElementById('amount');
     const splitText = document.querySelector('.tabular-nums'); // The "70% / 30%" text
-    const displayGrace = document.querySelectorAll('.tabular-nums')[1]; // Sending $700.00
-    const displayZimAgri = document.querySelectorAll('.tabular-nums')[2]; // Investing $300.00
+    const displayFamilyAmt = document.getElementById('displayFamilyAmt');
+    const displayInvestAmt = document.getElementById('displayInvestAmt');
+    const displayRecipientName = document.getElementById('displayRecipientName');
+    const displayAssetName = document.getElementById('displayAssetName');
+    
     let selectedAssetName = "ZimAgri Fund";
     let selectedRecipientName = "Grace";
 
@@ -296,12 +299,10 @@
         const familyAmt = (total * familyPct / 100).toFixed(2);
         const investAmt = (total * investPct / 100).toFixed(2);
         
-        if (displayGrace) {
-            displayGrace.parentElement.innerHTML = `Sending <span class="font-bold tabular-nums">$${familyAmt}</span> to ${selectedRecipientName}`;
-        }
-        if (displayZimAgri) {
-            displayZimAgri.parentElement.innerHTML = `Investing <span class="font-bold tabular-nums">$${investAmt}</span> in ${selectedAssetName}`;
-        }
+        if (displayFamilyAmt) displayFamilyAmt.textContent = `$${familyAmt}`;
+        if (displayInvestAmt) displayInvestAmt.textContent = `$${investAmt}`;
+        if (displayRecipientName) displayRecipientName.textContent = selectedRecipientName;
+        if (displayAssetName) displayAssetName.textContent = selectedAssetName;
         
         // Update slider background gradient
         slider.style.background = `linear-gradient(to right, #111111 0%, #111111 ${val}%, #1DB954 ${val}%, #1DB954 100%)`;
