@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ZimVest - Portfolio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1DB954",
+                        "primary-dark": "#1ed760",
+                        "background-light": "#F8F9FA",
+                        "background-dark": "#000000",
+                        "surface": "#FFFFFF",
+                        "text-main": "#111827",
+                        "text-muted": "#6B7280",
+                        "accent-emerald": "#1DB954",
+                        "border-light": "#E5E7EB",
+                        "sidebar-bg": "#111111"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "sm": "0.25rem",
+                        "md": "0.5rem",
+                        "lg": "1rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        "hover": "0 4px 20px rgba(29, 185, 84, 0.15)"
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .stock-badge {
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+    .stock-up { background: #eaf8f0; color: #1DB954; }
+    .stock-down { background: #fdf2f2; color: #e02424; }
+</style>
+</head>
+<body class="bg-background-light text-text-main antialiased min-h-screen flex">
+<!-- Sidebar Navigation -->
+<aside class="w-[240px] bg-sidebar-bg flex-shrink-0 flex flex-col min-h-screen border-r border-gray-800 hidden md:flex">
+<div class="p-6 flex items-center gap-3">
+<div class="size-8 bg-primary rounded-sm flex items-center justify-center">
+<span class="text-white font-bold text-xl leading-none">Z</span>
+</div>
+<h1 class="text-white text-2xl font-bold tracking-tight">ZimVest</h1>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-2">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-white/70 hover:bg-white/5 hover:text-white transition-colors border-l-2 border-transparent" href="dashboard.html">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-sm bg-white/10 border-l-2 border-primary text-white transition-colors" href="portfolio.html">
+<span class="material-symbols-outlined text-[20px]" data-icon="pie_chart" data-weight="fill" style="font-variation-settings: 'FILL' 1;">pie_chart</span>
+<span class="text-sm font-medium">Portfolio</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-white/70 hover:bg-white/5 hover:text-white transition-colors border-l-2 border-transparent" href="send_invest.html">
+<span class="material-symbols-outlined text-[20px]" data-icon="send">send</span>
+<span class="text-sm font-medium">Send &amp; Invest</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-white/70 hover:bg-white/5 hover:text-white transition-colors border-l-2 border-transparent" href="kyc.html">
+<span class="material-symbols-outlined text-[20px]" data-icon="history">how_to_reg</span>
+<span class="text-sm font-medium">KYC Verification</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-white/70 hover:bg-white/5 hover:text-white transition-colors border-l-2 border-transparent" href="admin.html">
+<span class="material-symbols-outlined text-[20px]" data-icon="history">admin_panel_settings</span>
+<span class="text-sm font-medium">Admin Panel</span>
+</a>
+</nav>
+<div class="p-4 mt-auto">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-white/70 hover:bg-white/5 hover:text-white transition-colors border-l-2 border-transparent" href="#" onclick="logout()">
+<span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+<span class="text-sm font-medium">Log Out</span>
+</a>
+<div class="mt-4 flex items-center gap-3 px-3 py-3 border-t border-white/10">
+<div class="size-8 rounded-sm bg-primary flex items-center justify-center text-white font-bold" id="userInitial">T</div>
+<div class="flex flex-col">
+<span class="text-white text-sm font-medium" id="userNameDisplay">User</span>
+<span class="text-primary text-xs">Verified</span>
+</div>
+</div>
+</div>
+</aside>
+
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0 overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="h-16 flex items-center justify-between px-8 bg-surface border-b border-border-light sticky top-0 z-10">
+<h2 class="text-text-main text-xl font-bold">Portfolio</h2>
+<div class="flex items-center gap-4">
+<div class="relative">
+    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">search</span>
+    <input type="text" placeholder="Search ZSE Stocks..." class="pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+</div>
+<button class="text-text-muted hover:text-text-main p-2">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+
+<!-- Scrollable Content -->
+<div class="p-8 max-w-6xl mx-auto w-full flex-1 flex flex-col gap-8">
+    <!-- Portfolio Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-surface p-6 rounded-lg border border-border-light shadow-sm">
+            <p class="text-text-muted text-xs font-bold uppercase tracking-widest mb-1">Total Assets</p>
+            <h3 class="text-2xl font-black">$42,080.00</h3>
+            <p class="text-primary text-xs font-bold mt-2 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">trending_up</span> +$1,240 (3.2%)
+            </p>
+        </div>
+        <div class="bg-surface p-6 rounded-lg border border-border-light shadow-sm">
+            <p class="text-text-muted text-xs font-bold uppercase tracking-widest mb-1">Active Positions</p>
+            <h3 class="text-2xl font-black">12</h3>
+            <p class="text-text-muted text-xs font-bold mt-2">Across 3 Asset Classes</p>
+        </div>
+        <div class="bg-surface p-6 rounded-lg border border-border-light shadow-sm">
+            <p class="text-text-muted text-xs font-bold uppercase tracking-widest mb-1">Cash Balance</p>
+            <h3 class="text-2xl font-black">$3,150.00</h3>
+            <button class="text-primary text-xs font-bold mt-2 hover:underline">Invest Now</button>
+        </div>
+    </div>
+
+    <!-- ZSE Market List -->
+    <section class="flex flex-col gap-4">
+        <div class="flex items-center justify-between">
+            <h3 class="text-xl font-bold text-text-main">Zimbabwe Stock Exchange (ZSE)</h3>
+            <div class="flex gap-2">
+                <span class="text-xs font-bold px-3 py-1 bg-gray-100 rounded-full text-gray-600">RTGS Market</span>
+                <span class="text-xs font-bold px-3 py-1 bg-green-50 rounded-full text-primary">VFEX (USD)</span>
+            </div>
+        </div>
+        <div class="bg-surface border border-border-light rounded-lg overflow-hidden shadow-sm">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Company</th>
+                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Symbol</th>
+                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">Price (USD)</th>
+                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">24h Change</th>
+                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    <!-- Delta -->
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 bg-red-100 rounded-md flex items-center justify-center text-red-600 font-bold text-xs">DL</div>
+                                <span class="font-bold text-sm">Delta Corporation</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm font-mono text-gray-600">DLTA.zw</td>
+                        <td class="px-6 py-4 text-sm font-bold">$1.45</td>
+                        <td class="px-6 py-4"><span class="stock-badge stock-up">+1.2%</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-primary text-xs font-bold px-4 py-2 border border-primary rounded-md hover:bg-primary hover:text-white transition-all">Buy Fractional</button>
+                        </td>
+                    </tr>
+                    <!-- Econet -->
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 bg-blue-100 rounded-md flex items-center justify-center text-blue-600 font-bold text-xs">EC</div>
+                                <span class="font-bold text-sm">Econet Wireless</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm font-mono text-gray-600">ECO.zw</td>
+                        <td class="px-6 py-4 text-sm font-bold">$0.82</td>
+                        <td class="px-6 py-4"><span class="stock-badge stock-down">-0.5%</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-primary text-xs font-bold px-4 py-2 border border-primary rounded-md hover:bg-primary hover:text-white transition-all">Buy Fractional</button>
+                        </td>
+                    </tr>
+                    <!-- Innscor -->
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 bg-orange-100 rounded-md flex items-center justify-center text-orange-600 font-bold text-xs">IN</div>
+                                <span class="font-bold text-sm">Innscor Africa</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm font-mono text-gray-600">INN.zw</td>
+                        <td class="px-6 py-4 text-sm font-bold">$1.12</td>
+                        <td class="px-6 py-4"><span class="stock-badge stock-up">+2.4%</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-primary text-xs font-bold px-4 py-2 border border-primary rounded-md hover:bg-primary hover:text-white transition-all">Buy Fractional</button>
+                        </td>
+                    </tr>
+                    <!-- Simbisa -->
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 bg-yellow-100 rounded-md flex items-center justify-center text-yellow-600 font-bold text-xs">SB</div>
+                                <span class="font-bold text-sm">Simbisa Brands</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm font-mono text-gray-600">SIM.zw</td>
+                        <td class="px-6 py-4 text-sm font-bold">$0.48</td>
+                        <td class="px-6 py-4"><span class="stock-badge stock-up">+0.8%</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-primary text-xs font-bold px-4 py-2 border border-primary rounded-md hover:bg-primary hover:text-white transition-all">Buy Fractional</button>
+                        </td>
+                    </tr>
+                    <!-- Padenga -->
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 bg-green-100 rounded-md flex items-center justify-center text-green-600 font-bold text-xs">PD</div>
+                                <span class="font-bold text-sm">Padenga Holdings</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm font-mono text-gray-600">PHL.zw</td>
+                        <td class="px-6 py-4 text-sm font-bold">$0.32</td>
+                        <td class="px-6 py-4"><span class="stock-badge stock-down">-1.1%</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-primary text-xs font-bold px-4 py-2 border border-primary rounded-md hover:bg-primary hover:text-white transition-all">Buy Fractional</button>
+                        </td>
+                    </tr>
+                    <!-- EcoCash -->
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 bg-blue-100 rounded-md flex items-center justify-center text-blue-600 font-bold text-xs">EC</div>
+                                <span class="font-bold text-sm">EcoCash Holdings</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm font-mono text-gray-600">EHZL.zw</td>
+                        <td class="px-6 py-4 text-sm font-bold">$0.25</td>
+                        <td class="px-6 py-4"><span class="stock-badge stock-up">+3.5%</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-primary text-xs font-bold px-4 py-2 border border-primary rounded-md hover:bg-primary hover:text-white transition-all">Buy Fractional</button>
+                        </td>
+                    </tr>
+                    <!-- NatFoods -->
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 bg-red-100 rounded-md flex items-center justify-center text-red-600 font-bold text-xs">NF</div>
+                                <span class="font-bold text-sm">National Foods</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm font-mono text-gray-600">NTFD.zw</td>
+                        <td class="px-6 py-4 text-sm font-bold">$3.10</td>
+                        <td class="px-6 py-4"><span class="stock-badge stock-up">+0.2%</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-primary text-xs font-bold px-4 py-2 border border-primary rounded-md hover:bg-primary hover:text-white transition-all">Buy Fractional</button>
+                        </td>
+                    </tr>
+                    <!-- OK Zimbabwe -->
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 bg-red-100 rounded-md flex items-center justify-center text-red-600 font-bold text-xs">OK</div>
+                                <span class="font-bold text-sm">OK Zimbabwe</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm font-mono text-gray-600">OKZ.zw</td>
+                        <td class="px-6 py-4 text-sm font-bold">$0.18</td>
+                        <td class="px-6 py-4"><span class="stock-badge stock-down">-0.2%</span></td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-primary text-xs font-bold px-4 py-2 border border-primary rounded-md hover:bg-primary hover:text-white transition-all">Buy Fractional</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- My Holdings -->
+    <section class="flex flex-col gap-4">
+        <h3 class="text-xl font-bold text-text-main">My Holdings</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- ZimAgri -->
+            <div class="bg-surface border border-border-light rounded-lg p-6 flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-4">
+                    <div class="size-12 bg-green-50 rounded-lg flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">agriculture</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm">ZimAgri Fund</h4>
+                        <p class="text-xs text-text-muted">1.5 Units @ $19,000</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="font-bold text-sm">$28,500.00</p>
+                    <p class="text-primary text-xs font-bold">+12% Profit</p>
+                </div>
+            </div>
+            <!-- Harare RE -->
+            <div class="bg-surface border border-border-light rounded-lg p-6 flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-4">
+                    <div class="size-12 bg-blue-50 rounded-lg flex items-center justify-center">
+                        <span class="material-symbols-outlined text-blue-600">apartment</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm">Harare Real Estate Trust</h4>
+                        <p class="text-xs text-text-muted">450 Shares @ $30.17</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="font-bold text-sm">$13,580.00</p>
+                    <p class="text-primary text-xs font-bold">+5.2% Profit</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</main>
+
+<script>
+    // Session check
+    const session = JSON.parse(localStorage.getItem('zimvest_session'));
+    if (!session || !session.loggedIn) {
+        window.location.href = 'login.html';
+    } else {
+        document.getElementById('userNameDisplay').textContent = session.name || 'User';
+        document.getElementById('userInitial').textContent = (session.name || 'U').charAt(0).toUpperCase();
+    }
+
+    function logout() {
+        localStorage.removeItem('zimvest_session');
+        window.location.href = 'login.html';
+    }
+</script>
+</body>
+</html>
