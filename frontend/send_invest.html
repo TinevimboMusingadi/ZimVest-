@@ -195,6 +195,39 @@
     if (!session || !session.loggedIn) {
         window.location.href = 'login.html';
     }
+
+    // Slider Logic
+    const slider = document.getElementById('allocationRange');
+    const amountInput = document.getElementById('amount');
+    const splitText = document.querySelector('.tabular-nums'); // The "70% / 30%" text
+    const displayGrace = document.querySelectorAll('.tabular-nums')[1]; // Sending $700.00
+    const displayZimAgri = document.querySelectorAll('.tabular-nums')[2]; // Investing $300.00
+
+    function updateUI() {
+        const total = parseFloat(amountInput.value) || 0;
+        const val = slider.value;
+        const familyPct = val;
+        const investPct = 100 - val;
+        
+        // Update percentages
+        if (splitText) splitText.textContent = `${familyPct}% / ${investPct}%`;
+        
+        // Update amounts
+        const familyAmt = (total * familyPct / 100).toFixed(2);
+        const investAmt = (total * investPct / 100).toFixed(2);
+        
+        if (displayGrace) displayGrace.textContent = `$${familyAmt}`;
+        if (displayZimAgri) displayZimAgri.textContent = `$${investAmt}`;
+        
+        // Update slider background gradient
+        slider.style.background = `linear-gradient(to right, #111111 0%, #111111 ${val}%, #1DB954 ${val}%, #1DB954 100%)`;
+    }
+
+    slider.addEventListener('input', updateUI);
+    amountInput.addEventListener('input', updateUI);
+
+    // Initial call
+    updateUI();
 </script>
 </body>
 </html>
