@@ -445,12 +445,10 @@ function startWebDemo() {
     { target: '#webTx2', x: 80, y: 12, click: true, delay: 700 },
     { target: '#webTx3', x: 80, y: 12, click: true, delay: 700 },
     // Scroll to assets
-    { target: '#webNavPort', x: 50, y: 10, click: true, nav: true, delay: 800, scrollTo: 300 },
+    { target: '#webNavPort', x: 50, y: 10, click: true, nav: true, delay: 1000, scrollTo: 300 },
     { target: '#webAsset1', x: 80, y: 12, click: true, delay: 700 },
     { target: '#webAsset2', x: 80, y: 12, click: true, delay: 700 },
-    { target: '#webAsset3', x: 80, y: 12, click: true, delay: 700 },
-    // Settings
-    { target: '#webNavSettings', x: 50, y: 10, click: true, nav: true, delay: 1000 },
+    { target: '#webAsset3', x: 80, y: 12, click: true, delay: 1500 },
     // Back to Dashboard
     { target: '#webNavDash', x: 50, y: 10, click: true, nav: true, delay: 1500, scrollTo: 0 },
   ];
