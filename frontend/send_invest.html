@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Send &amp; Invest Flow - ZimVest</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1DB954",
+                        "background-light": "#F8F9FA",
+                        "background-dark": "#000000",
+                        "surface": "#FFFFFF",
+                        "text-main": "#111827",
+                        "muted": "#6B7280",
+                        "accent": "#1DB954",
+                        "remittance": "#111111"
+                    },
+                    fontFamily: {
+                        "heading": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "md": "0.5rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        "card-hover": "0 4px 20px rgba(29, 185, 84, 0.15)"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Custom Slider Styling */
+        .allocation-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(to right, #111111 0%, #111111 70%, #1DB954 70%, #1DB954 100%);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .allocation-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border: 2px solid #1DB954;
+        }
+
+        .allocation-slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border: 2px solid #1DB954;
+        }
+    </style>
+</head>
+<body class="bg-background-light font-body text-text-main h-screen overflow-hidden flex flex-col">
+<!-- Minimal Header -->
+<header class="w-full h-16 bg-surface border-b border-gray-200 flex items-center px-6 shrink-0 z-10 relative">
+<a href="dashboard.html" class="flex items-center text-gray-800 hover:text-primary transition-colors group">
+<span class="material-symbols-outlined mr-2 transition-transform group-hover:-translate-x-1">arrow_back</span>
+<span class="font-medium text-sm">Back to Dashboard</span>
+</a>
+<div class="absolute left-1/2 -translate-x-1/2">
+<span class="font-heading font-bold text-xl tracking-tight text-black">ZimVest</span>
+</div>
+</header>
+<!-- Modal Overlay Background -->
+<main class="flex-1 relative flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+<!-- Modal Card -->
+<div class="bg-surface w-full max-w-[600px] rounded-lg shadow-xl flex flex-col max-h-full overflow-y-auto" style="box-shadow: 0 20px 40px rgba(0,0,0, 0.2);">
+<div class="flex flex-col p-8 gap-6">
+<div class="text-center pb-2 border-b border-gray-100">
+<h1 class="font-heading text-[28px] font-bold leading-tight tracking-tight mb-2">Send &amp; Invest</h1>
+<p class="text-muted text-sm">Allocate your funds between a recipient and an investment asset.</p>
+</div>
+<!-- Input Group: Total Amount -->
+<div class="flex flex-col gap-2">
+<label class="text-text-main text-[13px] font-bold tracking-[0.05em] uppercase" for="amount">Total Amount (USD)</label>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 flex items-center pl-4 text-muted font-medium">$</span>
+<input class="form-input w-full rounded border-gray-300 bg-surface focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-50 h-14 pl-8 pr-4 text-text-main text-lg font-bold placeholder:text-gray-300 transition-shadow" id="amount" placeholder="0.00" type="text" value="1000.00"/>
+</div>
+</div>
+<!-- Input Group: Recipient -->
+<div class="flex flex-col gap-2">
+<label class="text-text-main text-[13px] font-bold tracking-[0.05em] uppercase" for="recipient">Recipient</label>
+<div class="relative">
+<select class="form-select w-full rounded border-gray-300 bg-surface focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-50 h-14 pl-4 pr-10 text-text-main text-base font-medium appearance-none transition-shadow" id="recipient">
+<option disabled="" value="">Select a recipient</option>
+<option selected="" value="grace">Grace (Mother) - **** 4892</option>
+<option value="john">John (Brother) - **** 1102</option>
+<option value="new">+ Add New Recipient</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-muted">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Input Group: Investment Asset Selector -->
+<div class="flex flex-col gap-2">
+<label class="text-text-main text-[13px] font-bold tracking-[0.05em] uppercase mb-1">Target Investment</label>
+<!-- Asset Item Card (Active) -->
+<div class="h-[72px] border-2 border-primary rounded flex items-center p-4 cursor-pointer bg-green-50/50 transition-colors relative">
+<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-4 shrink-0">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">agriculture</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-0.5">
+<h3 class="text-sm font-bold text-text-main truncate">ZimAgri Fund</h3>
+<span class="text-xs font-bold text-primary">+8.4% YTD</span>
+</div>
+<p class="text-xs text-muted truncate">Commercial farming real estate</p>
+</div>
+<div class="ml-4 shrink-0 flex items-center justify-center w-5 h-5 rounded-full border-2 border-primary bg-primary relative">
+<div class="w-2 h-2 rounded-full bg-white"></div>
+</div>
+</div>
+<!-- Asset Item Card (Inactive) -->
+<div class="h-[72px] border border-gray-200 rounded flex items-center p-4 cursor-pointer hover:bg-gray-50 transition-colors relative mt-2">
+<div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mr-4 shrink-0">
+<span class="material-symbols-outlined text-muted text-xl" style="font-variation-settings: 'FILL' 1;">domain</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-0.5">
+<h3 class="text-sm font-bold text-text-main truncate">Harare Prime Real Estate</h3>
+<span class="text-xs font-bold text-primary">+5.2% YTD</span>
+</div>
+<p class="text-xs text-muted truncate">Commercial &amp; Residential</p>
+</div>
+<div class="ml-4 shrink-0 w-5 h-5 rounded-full border-2 border-gray-300"></div>
+</div>
+</div>
+<!-- Split Allocation Area -->
+<div class="bg-background-light p-6 rounded border border-gray-200 mt-2">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-sm font-bold text-text-main">Allocation Split</h3>
+<p class="text-sm font-bold text-text-main tabular-nums">70% / 30%</p>
+</div>
+<!-- Slider -->
+<div class="mb-6 relative pt-2">
+<input class="allocation-slider" id="allocationRange" max="100" min="0" type="range" value="70"/>
+<div class="flex justify-between text-xs text-muted mt-3 font-medium">
+<span>Remittance</span>
+<span>Investment</span>
+</div>
+</div>
+<!-- Live Calculation Text -->
+<div class="bg-surface border border-gray-200 rounded p-4 flex flex-col md:flex-row justify-between items-center text-sm font-medium gap-3">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-remittance"></div>
+<span class="text-text-main">Sending <span class="font-bold tabular-nums">$700.00</span> to Grace</span>
+</div>
+<span class="text-gray-300 hidden md:inline">|</span>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-accent"></div>
+<span class="text-text-main">Investing <span class="font-bold tabular-nums">$300.00</span> in ZimAgri</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex gap-4 pt-4 border-t border-gray-100 mt-2">
+<a href="dashboard.html" class="flex-1 flex justify-center items-center h-12 border border-gray-300 rounded text-text-main font-semibold text-sm hover:bg-gray-50 transition-colors">Cancel</a>
+<button class="flex-[2] h-12 bg-primary rounded text-white font-bold text-sm hover:bg-green-600 transition-colors shadow-sm flex justify-center items-center gap-2 relative">
+                        Confirm Allocation
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<script>
+    // Session check
+    const session = JSON.parse(localStorage.getItem('zimvest_session'));
+    if (!session || !session.loggedIn) {
+        window.location.href = 'login.html';
+    }
+</script>
+</body>
+</html>
