@@ -74,7 +74,7 @@
         }
     </style>
 </head>
-<body class="bg-background-light font-body text-text-main h-screen overflow-hidden flex flex-col">
+<body class="bg-background-light font-body text-text-main min-h-screen flex flex-col">
 <!-- Minimal Header -->
 <header class="w-full h-16 bg-surface border-b border-gray-200 flex items-center px-6 shrink-0 z-10 relative">
 <a href="dashboard.html" class="flex items-center text-gray-800 hover:text-primary transition-colors group">
@@ -86,9 +86,9 @@
 </div>
 </header>
 <!-- Modal Overlay Background -->
-<main class="flex-1 relative flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+<main class="flex-1 relative flex flex-col items-center py-12 px-4 bg-black/40 backdrop-blur-sm overflow-y-auto">
 <!-- Modal Card -->
-<div class="bg-surface w-full max-w-[600px] rounded-lg shadow-xl flex flex-col max-h-full overflow-y-auto" style="box-shadow: 0 20px 40px rgba(0,0,0, 0.2);">
+<div class="bg-surface w-full max-w-[600px] rounded-lg shadow-xl flex flex-col shrink-0" style="box-shadow: 0 20px 40px rgba(0,0,0, 0.2);">
 <div class="flex flex-col p-8 gap-6">
 <div class="text-center pb-2 border-b border-gray-100">
 <h1 class="font-heading text-[28px] font-bold leading-tight tracking-tight mb-2">Send &amp; Invest</h1>
