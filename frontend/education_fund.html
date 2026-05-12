@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>ZimVest - Education Fund</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1DB954",
+                        "primary-dark": "#1ed760",
+                        "background-light": "#F8F9FA",
+                        "background-dark": "#000000",
+                        "surface": "#FFFFFF",
+                        "text-main": "#111827",
+                        "text-muted": "#6B7280",
+                        "accent-emerald": "#1DB954",
+                        "border-light": "#E5E7EB",
+                        "sidebar-bg": "#111111"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "sm": "0.25rem",
+                        "md": "0.5rem",
+                        "lg": "1rem",
+                        "full": "9999px"
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .progress-ring {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+</head>
+<body class="bg-background-light text-text-main antialiased min-h-screen flex">
+    <!-- Sidebar Navigation -->
+    <aside class="w-[240px] bg-sidebar-bg flex-shrink-0 flex flex-col min-h-screen border-r border-gray-800 hidden md:flex">
+        <div class="p-6 flex items-center gap-3">
+            <div class="size-8 bg-primary rounded-sm flex items-center justify-center">
+                <span class="text-white font-bold text-xl leading-none">Z</span>
+            </div>
+            <h1 class="text-white text-2xl font-bold tracking-tight">ZimVest</h1>
+        </div>
+        <nav class="flex-1 px-4 py-4 space-y-2">
+            <a class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-white/70 hover:bg-white/5 hover:text-white transition-colors border-l-2 border-transparent" href="dashboard.html">
+                <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                <span class="text-sm font-medium">Dashboard</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-white/70 hover:bg-white/5 hover:text-white transition-colors border-l-2 border-transparent" href="portfolio.html">
+                <span class="material-symbols-outlined text-[20px]">pie_chart</span>
+                <span class="text-sm font-medium">Portfolio</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-white/70 hover:bg-white/5 hover:text-white transition-colors border-l-2 border-transparent" href="send_invest.html">
+                <span class="material-symbols-outlined text-[20px]">send</span>
+                <span class="text-sm font-medium">Send & Invest</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 rounded-sm bg-white/10 border-l-2 border-primary text-white transition-colors" href="education_fund.html">
+                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">school</span>
+                <span class="text-sm font-medium">Education Fund</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-white/70 hover:bg-white/5 hover:text-white transition-colors border-l-2 border-transparent" href="kyc.html">
+                <span class="material-symbols-outlined text-[20px]">how_to_reg</span>
+                <span class="text-sm font-medium">KYC Verification</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 rounded-sm text-white/70 hover:bg-white/5 hover:text-white transition-colors border-l-2 border-transparent" href="admin.html">
+                <span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+                <span class="text-sm font-medium">Admin Panel</span>
+            </a>
+        </nav>
+        <div class="p-4 mt-auto border-t border-white/10">
+            <div class="flex items-center gap-3 px-3 py-3">
+                <div class="size-8 rounded-sm bg-primary flex items-center justify-center text-white font-bold" id="userInitial">T</div>
+                <div class="flex flex-col">
+                    <span class="text-white text-sm font-medium" id="userNameDisplay">User</span>
+                    <span class="text-primary text-xs">Verified Account</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-x-hidden">
+        <!-- Top Header -->
+        <header class="h-16 flex items-center justify-between px-8 bg-surface border-b border-border-light sticky top-0 z-10">
+            <div class="flex items-center gap-4">
+                <a href="dashboard.html" class="md:hidden">
+                    <span class="material-symbols-outlined text-gray-600">arrow_back</span>
+                </a>
+                <h2 class="text-text-main text-xl font-bold">Education Fund</h2>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="bg-primary text-white px-4 py-2 rounded-md font-bold text-sm hover:bg-primary-dark transition-all">
+                    Create New Fund
+                </button>
+            </div>
+        </header>
+
+        <!-- Scrollable Body -->
+        <div class="p-8 max-w-6xl mx-auto w-full flex-1 flex flex-col gap-8">
+            
+            <!-- Active Fund Card -->
+            <div class="bg-surface border border-border-light rounded-xl overflow-hidden shadow-sm flex flex-col md:flex-row">
+                <div class="flex-1 p-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-2 py-1 bg-green-100 text-primary text-[10px] font-bold uppercase rounded tracking-wider">Active Goal</span>
+                        <h3 class="text-text-muted text-xs font-bold uppercase tracking-widest">University Savings — Tinashe Jr.</h3>
+                    </div>
+                    <div class="flex items-baseline gap-2 mb-6">
+                        <h4 class="text-[42px] font-black leading-none">$12,450.00</h4>
+                        <span class="text-text-muted text-sm font-medium">of $45,000.00 goal</span>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between text-sm">
+                            <span class="font-bold text-gray-600">Progress</span>
+                            <span class="font-bold text-primary">27.6%</span>
+                        </div>
+                        <div class="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" style="width: 27.6%"></div>
+                        </div>
+                        <p class="text-xs text-text-muted">Estimated completion: <strong>September 2028</strong></p>
+                    </div>
+                    
+                    <div class="flex gap-4 mt-8">
+                        <button class="flex-1 h-12 bg-sidebar-bg text-white rounded-md font-bold text-sm hover:bg-black transition-colors">Top Up Fund</button>
+                        <button class="flex-1 h-12 border border-gray-200 rounded-md font-bold text-sm hover:bg-gray-50 transition-colors">Adjust Target</button>
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-[320px] bg-gray-50 p-8 border-l border-border-light flex flex-col justify-center items-center text-center">
+                    <div class="relative size-32 mb-6">
+                        <svg class="size-full" viewBox="0 0 100 100">
+                            <circle class="text-gray-200 stroke-current" stroke-width="10" fill="transparent" r="40" cx="50" cy="50"></circle>
+                            <circle class="text-primary stroke-current progress-ring" stroke-width="10" stroke-linecap="round" fill="transparent" r="40" cx="50" cy="50" style="stroke-dasharray: 251.2; stroke-dashoffset: 181.8"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-2xl font-black text-gray-900">4Y</span>
+                            <span class="text-[10px] font-bold text-gray-500 uppercase">Remaining</span>
+                        </div>
+                    </div>
+                    <h5 class="font-bold text-sm mb-1">On Track</h5>
+                    <p class="text-xs text-text-muted">Based on your current monthly contribution of $250.00</p>
+                </div>
+            </div>
+
+            <!-- Target Institutions -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <section class="flex flex-col gap-4">
+                    <h3 class="text-lg font-bold">Target Institutions (Zimbabwe)</h3>
+                    <div class="space-y-3">
+                        <!-- UZ -->
+                        <div class="bg-surface border border-border-light p-4 rounded-lg flex items-center justify-between hover:border-primary transition-colors cursor-pointer group">
+                            <div class="flex items-center gap-4">
+                                <div class="size-12 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 font-bold">UZ</div>
+                                <div>
+                                    <h4 class="text-sm font-bold">University of Zimbabwe</h4>
+                                    <p class="text-xs text-text-muted">Harare • Medicine & Engineering</p>
+                                </div>
+                            </div>
+                            <span class="material-symbols-outlined text-gray-300 group-hover:text-primary transition-colors">arrow_forward_ios</span>
+                        </div>
+                        <!-- NUST -->
+                        <div class="bg-surface border border-border-light p-4 rounded-lg flex items-center justify-between hover:border-primary transition-colors cursor-pointer group">
+                            <div class="flex items-center gap-4">
+                                <div class="size-12 bg-orange-50 rounded-lg flex items-center justify-center text-orange-600 font-bold">NT</div>
+                                <div>
+                                    <h4 class="text-sm font-bold">NUST</h4>
+                                    <p class="text-xs text-text-muted">Bulawayo • Applied Sciences</p>
+                                </div>
+                            </div>
+                            <span class="material-symbols-outlined text-gray-300 group-hover:text-primary transition-colors">arrow_forward_ios</span>
+                        </div>
+                        <!-- Arundel -->
+                        <div class="bg-surface border border-border-light p-4 rounded-lg flex items-center justify-between hover:border-primary transition-colors cursor-pointer group">
+                            <div class="flex items-center gap-4">
+                                <div class="size-12 bg-red-50 rounded-lg flex items-center justify-center text-red-600 font-bold">AS</div>
+                                <div>
+                                    <h4 class="text-sm font-bold">Arundel School</h4>
+                                    <p class="text-xs text-text-muted">Secondary • High School</p>
+                                </div>
+                            </div>
+                            <span class="material-symbols-outlined text-gray-300 group-hover:text-primary transition-colors">arrow_forward_ios</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="flex flex-col gap-4">
+                    <h3 class="text-lg font-bold">Recent Contributions</h3>
+                    <div class="bg-surface border border-border-light rounded-lg divide-y divide-gray-100 overflow-hidden">
+                        <div class="p-4 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 bg-green-50 rounded flex items-center justify-center"><span class="material-symbols-outlined text-primary text-sm">add</span></div>
+                                <span class="text-sm font-medium">Monthly Allocation</span>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-bold text-gray-900">+$250.00</p>
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">12 May 2026</p>
+                            </div>
+                        </div>
+                        <div class="p-4 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 bg-green-50 rounded flex items-center justify-center"><span class="material-symbols-outlined text-primary text-sm">add</span></div>
+                                <span class="text-sm font-medium">Bonus Top-up</span>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-bold text-gray-900">+$1,000.00</p>
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">05 May 2026</p>
+                            </div>
+                        </div>
+                        <div class="p-4 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 bg-green-50 rounded flex items-center justify-center"><span class="material-symbols-outlined text-primary text-sm">add</span></div>
+                                <span class="text-sm font-medium">Monthly Allocation</span>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-bold text-gray-900">+$250.00</p>
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">12 Apr 2026</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-full py-3 text-xs font-bold text-primary hover:bg-green-50 rounded-md transition-colors uppercase tracking-widest">View All History</button>
+                </section>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const session = JSON.parse(localStorage.getItem('zimvest_session'));
+        if (!session || !session.loggedIn) {
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('userNameDisplay').textContent = session.name || 'User';
+            document.getElementById('userInitial').textContent = (session.name || 'U').charAt(0).toUpperCase();
+        }
+    </script>
+</body>
+</html>
